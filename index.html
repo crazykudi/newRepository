@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css" />
+    <title>Minesweeper</title>
+</head>
+
+<body onload="init()">
+
+    <h1>Minesweeper</h1>
+    <div class="timer">Game time</div>
+    <table style="margin: auto;">
+        <tbody class="table" oncontextmenu="return false;">
+        </tbody>
+    </table>
+    <div>
+        <input type="button" onclick="changeLevel(this)" value="Beginner">
+        <input type="button" onclick="changeLevel(this)" value="Medium">
+        <input type="button" onclick="changeLevel(this)" value="Expert">
+    </div>
+
+    <!-- <button onclick="init()">restart</button> -->
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

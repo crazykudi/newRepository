@@ -1,0 +1,25 @@
+* {
+	margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+body {
+	background-color: #c0c0c0;
+}
+
+h1 {
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.table * {
+    border: 1px solid black;
+}
+
+td {
+    width: 20px;
+    height: 20px;
+}
