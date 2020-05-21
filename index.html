@@ -9,20 +9,20 @@
 </head>
 
 <body onload="init()">
-
-    <h1>Minesweeper</h1>
-    <div class="timer">Game time</div>
-    <table style="margin: auto;">
-        <tbody class="table" oncontextmenu="return false;">
-        </tbody>
-    </table>
-    <div>
+    <div class="timer">Timer: 0</div>
+    <h2>Minesweeper</h2>
+    <div class="buttons-container">
         <input type="button" onclick="changeLevel(this)" value="Beginner">
         <input type="button" onclick="changeLevel(this)" value="Medium">
         <input type="button" onclick="changeLevel(this)" value="Expert">
     </div>
+    <div class="game-box">
+        <table style="margin: auto;">
+            <tbody class="table" oncontextmenu="return false;">
+            </tbody>
+        </table>
+    </div>
 
-    <!-- <button onclick="init()">restart</button> -->
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
 </body>

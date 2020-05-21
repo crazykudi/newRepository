@@ -1,25 +1,38 @@
 * {
-	margin: 0;
-    padding: 0;
-    text-align: center;
+   text-align: center;
 }
 
 body {
-	background-color: #c0c0c0;
+	background-color: lightgray
 }
 
-h1 {
-    border-bottom: 1px solid black;
-    margin-bottom: 20px;
+.buttons-container * {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    cursor: pointer;
+  }
+
+  .buttons-container{
+      padding-bottom: 20px; 
+  }
+  
+.timer{
+    text-align: right;
     padding-bottom: 10px;
+    color: red;
+    font-weight: bold;
+}
+
+h2 {
+    margin-bottom: 20px;
     padding-top: 10px;
 }
-
-.table * {
-    border: 1px solid black;
+button{
+    cursor: pointer;
 }
 
-td {
-    width: 20px;
-    height: 20px;
+.game-box{
+   /* width: 400px;
+   height: 400px; */
+   margin: auto;
 }

@@ -1,6 +1,17 @@
 'use strict'
 
-const MINE_FLAG = "#";
+const MARKED_MINE_IMAGE = `<img src="img/flagged.png" style="width: 15px; height: 15px">`;
+const EMPTY_IMG = `<img src="img/empty.png" style="width: 15px; height: 15px">`;
+const NEG_0_IMG = `<img src="img/0.png" style="width: 15px; height: 15px">`;
+const NEG_1_IMG = `<img src="img/1.png" style="width: 15px; height: 15px">`;
+const NEG_2_IMG = `<img src="img/2.png" style="width: 15px; height: 15px">`;
+const NEG_3_IMG = `<img src="img/3.png" style="width: 15px; height: 15px">`;
+const NEG_4_IMG = `<img src="img/4.png" style="width: 15px; height: 15px">`;
+const NEG_5_IMG = `<img src="img/5.png" style="width: 15px; height: 15px">`;
+const NEG_6_IMG = `<img src="img/6.png" style="width: 15px; height: 15px">`;
+const NEG_7_IMG = `<img src="img/7.png" style="width: 15px; height: 15px">`;
+const NEG_8_IMG = `<img src="img/8.png" style="width: 15px; height: 15px">`;
+
 const MINE = "*";
 const EMPTY = "";
 
@@ -31,11 +42,11 @@ function init() {
 
 function gGameInit() {
     var gGame = {
-        isOn: false,
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0
     }
+
     gElTimer.innerText = `Timer : ${gGame.secsPassed}`;
     return gGame;
 }
@@ -90,77 +101,103 @@ function renderBoard() {
             cellClass = getClassName({ i: i, j: j });
             var currCell = gBoard[i][j];
 
+            // if cell is flaged marked 
             if (currCell.isMarked) {
-                cellValue = MINE_FLAG;
-                strHTML += `<td onclick="cellClicked(this,${i},${j})"  style="background-color: white;" oncontextmenu="cellMarkedClicked(this,${i},${j});">${cellValue}</td>`
-            } else if (!currCell.isShown) {
-                cellValue = EMPTY;
-                strHTML += `<td onclick="cellClicked(this,${i},${j})" oncontextmenu="cellMarkedClicked(this,${i},${j});">${cellValue}</td>`
-            } else {
-                cellValue = currCell.isMine ? MINE_FLAG : currCell.minesAroundCount;
-                strHTML += `<td onclick="cellClicked(this,${i},${j})" style="background-color: white;" oncontextmenu="cellMarkedClicked(this,${i},${j});">${cellValue}</td>`
+                cellValue = MARKED_MINE_IMAGE;
+                strHTML += `<td onclick="cellClicked(${i},${j}"  oncontextmenu="cellMarkedClicked(${i},${j})">
+                ${cellValue}
+                </td>`
+                continue;
+            }
+            // if cell is shown
+            if (currCell.isShown) {
+
+                if (currCell.isMine) {
+                    cellValue = MARKED_MINE_IMAGE;
+                    strHTML += `<td onclick="cellClicked(${i},${j}"  oncontextmenu="cellMarkedClicked(${i},${j})">
+                    ${cellValue}
+                    </td>`
+                    continue;
+
+                } else {
+                    if (currCell.minesAroundCount === 0) { cellValue = NEG_0_IMG; }
+                    if (currCell.minesAroundCount === 1) { cellValue = NEG_1_IMG; }
+                    if (currCell.minesAroundCount === 2) { cellValue = NEG_2_IMG; }
+                    if (currCell.minesAroundCount === 3) { cellValue = NEG_3_IMG; }
+                    if (currCell.minesAroundCount === 4) { cellValue = NEG_4_IMG; }
+                    if (currCell.minesAroundCount === 5) { cellValue = NEG_5_IMG; }
+                    if (currCell.minesAroundCount === 6) { cellValue = NEG_6_IMG; }
+                    if (currCell.minesAroundCount === 7) { cellValue = NEG_7_IMG; }
+                    if (currCell.minesAroundCount === 8) { cellValue = NEG_8_IMG; }
+
+                    strHTML += `<td onclick="cellClicked(${i},${j}"  oncontextmenu="cellMarkedClicked(${i},${j})">
+                    ${cellValue}
+                    </td>` }
+
+            } else if (!currCell.isMarked) {
+                // if not shown and not marked , leave the cell as it is 
+                currCell = EMPTY_IMG;
+                strHTML += `<td onclick="cellClicked(${i},${j})" oncontextmenu="cellMarkedClicked(${i},${j});">${currCell}
+                </td>`
             }
         }
         strHTML += '</tr>';
         var elTbody = document.querySelector('.table');
         elTbody.innerHTML = strHTML;
     }
-    console.log('marked count:', gGame.markedCount);
-    console.log('shown count:', gGame.shownCount);
-
 }
 
-function cellClicked(elCell, i, j) {
+function cellClicked(i, j) {
     var currCell = gBoard[i][j];
 
-    if (gGame.secsPassed === 0) {
-        gIntervalId = setInterval(function () {
-            gGame.secsPassed = gGame.secsPassed + 1;
-            gElTimer.innerText = `Timer : ${gGame.secsPassed}`;
-            gGame.secsPassed = parseInt(gGame.secsPassed);
-        }, 1000);
-    }
+    // Start timer 
+    if (gGame.secsPassed === 0) stratTimer();
 
     if (currCell.isShown) return;
     if (currCell.isMarked) return;
 
+
+
+    currCell.isShown = true;
+
+    //end of the game ; you lost!
+    gGame.shownCount++;
     if (currCell.isMine) {
-        //end of the gmae ; you lost!
-        console.log('you lost the game!')
-    } else {
         currCell.isShown = true;
-        gGame.shownCount++;
-        revealNegs(i, j, gBoard);
-        console.log(gGame.shownCount);
-        if (checkGameOver()) {
-            console.log('you won the game!') // todo: use confirm message 
-        }
+        // revealAllMines();
+        var isWon = false;
+        printEndOfGameMsg(isWon);
+
+        // check if need to reveal negs around cell
+    } else if (currCell.minesAroundCount === 0) revealNegs(i, j, gBoard);
+
+
+    //check if game won
+    if (checkGameOver()) {
+        var isWon = true;
+        printEndOfGameMsg(isWon);
     }
+
+    console.log("gGame.shownCount:", gGame.shownCount)
     renderBoard();
 }
 
-function cellMarkedClicked(elCell, i, j) {
+function cellMarkedClicked(i, j) {
     var currCell = gBoard[i][j];
-    console.log(currCell);
-    if (gGame.secsPassed === 0) {
-        gIntervalId = setInterval(function () {
-            gGame.secsPassed = gGame.secsPassed + 1;
-            gElTimer.innerText = `Timer : ${gGame.secsPassed}`;
-            gGame.secsPassed = parseInt(gGame.secsPassed);
-        }, 1000);
-    }
+
+    // Start timer 
+    if (gGame.secsPassed === 0) stratTimer();
 
     if (currCell.isShown) return;
-    if (currCell.isMarked === false) {
-        currCell.isMarked = true;
-        gGame.markedCount++;
-    } else {
-        currCell.isMarked = false;
-        gGame.markedCount--;
-    }
+
+    // handle marked counter
+    currCell.isMarked = !currCell.isMarked;
+    gGame.markedCount = currCell.isMarked ? gGame.markedCount + 1 : gGame.markedCount - 1;
+
+    //check if game won
     if (checkGameOver()) {
-        console.log('you won the game!') // todo: use confirm message 
-        init();
+        var isWon = true;
+        printEndOfGameMsg(isWon);
     }
     renderBoard();
 }
@@ -208,8 +245,7 @@ function revealNegs(cellI, cellJ, board) {
     }
 }
 
-function changeLevel(elInput) { // Todo: time is restarted as well; not by cell click
-    console.log(elInput)
+function changeLevel(elInput) {
     switch (elInput.value) {
         case 'Beginner':
             gLevel.SIZE = 4;
@@ -232,4 +268,29 @@ function checkGameOver() {
     var sumCounts = gGame.markedCount + gGame.shownCount;
     if (sumCounts === gLevel.SIZE ** 2) return true;
     return false;
+}
+
+function printEndOfGameMsg(isWon) {
+    if (isWon) {
+        setTimeout(function () {
+            if (confirm(`Well Done!\n
+                It took you ${gGame.secsPassed} seconds to win!\n
+                Do you want to play again?`)) init()
+        }, 0)
+    } else {
+        setTimeout(function () {
+            if (confirm(`You Lost!\n
+                Do you want to play again?`)) init()
+        }, 0)
+
+    }
+
+}
+
+function stratTimer() {
+    gIntervalId = setInterval(function () {
+        gGame.secsPassed = gGame.secsPassed + 1;
+        gElTimer.innerText = `Timer : ${gGame.secsPassed}`;
+        gGame.secsPassed = parseInt(gGame.secsPassed);
+    }, 1000);
 }
