@@ -9,19 +9,28 @@
 </head>
 
 <body onload="init()">
-    <div class="timer">Timer: 0</div>
-    <h2>Minesweeper</h2>
-    <div class="buttons-container">
-        <input type="button" onclick="changeLevel(this)" value="Beginner">
-        <input type="button" onclick="changeLevel(this)" value="Medium">
-        <input type="button" onclick="changeLevel(this)" value="Expert">
+    <h1>Mine Sweeper</h1>
+
+    <div class="smile-box">
+        <img id="img" class="emoji" src="img/smile.png" onclick="init()">
+    </div>
+    <div class="timer">
+        <label id="minutes">00</label>:<label id="seconds">00</label>
     </div>
     <div class="game-box">
-        <table style="margin: auto;">
-            <tbody class="table" oncontextmenu="return false;">
+        <table class="table" oncontextmenu="return false;" style="margin: auto">
+            <tbody>
             </tbody>
         </table>
     </div>
+
+    <div class="buttons-container">
+        <button autofocus onclick="changeLevel(this,4,2)">Easy</button>
+        <button onclick="changeLevel(this,8,4)">Medium</button>
+        <button onclick="changeLevel(this,12,30)">Hard</button>
+    </div>
+    <div id="footer"> <span style=" font-size: 10px">
+            Ohad Horenstein @2020 | SPRINT #1 | Mine Sweeper</span></div>
 
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>

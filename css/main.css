@@ -1,38 +1,76 @@
 * {
-   text-align: center;
+    text-align: center;
 }
 
 body {
-	background-color: lightgray
+    background-color: black;
 }
-
-.buttons-container * {
-    background-color: #4CAF50; /* Green */
+h1 {
     color: white;
-    cursor: pointer;
-  }
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    background-color: black; 
+}
 
-  .buttons-container{
-      padding-bottom: 20px; 
-  }
-  
-.timer{
-    text-align: right;
-    padding-bottom: 10px;
-    color: red;
+.smile-box {
+    margin-bottom: 8px;
+}
+
+img#img.emoji {
+    cursor: pointer;
+}
+
+.timer {
+    color: white;
+    margin-bottom: 15px;
+}
+button {
+    margin: 10px;
+    border-radius: 4px;
     font-weight: bold;
-}
-
-h2 {
-    margin-bottom: 20px;
-    padding-top: 10px;
-}
-button{
+    outline-color: black;
     cursor: pointer;
+    background-color:white;
+    font-weight: lighter;
 }
 
-.game-box{
-   /* width: 400px;
-   height: 400px; */
-   margin: auto;
+.emoji {
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    color: black;
+    padding: 5px;
+    border: 2px double #000000;
+    border-radius: 5px;
+    box-shadow: 2px 2px black;
+    cursor: default;
+}
+
+.buttons-container {
+    margin-top: 5px;
+}
+
+.buttons-container button:focus {
+    font-weight: bolder;
+    background-color:white;
+
+}
+
+div.game-box {
+    margin-top: 5px;
+    cursor: pointer;
+    margin: auto;
+} 
+
+#footer {
+    position: absolute;
+    bottom: 5px;
+    text-align: center;
+    width: 100%;
+    font-size: smaller;
+    padding-top: 5px;
+    padding-bottom: 2px;
+    font-style: italic;
+    color: white;
 }
