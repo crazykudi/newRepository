@@ -9,6 +9,7 @@
 </head>
 
 <body onload="init()">
+
     <h1>Mine Sweeper</h1>
 
     <div class="smile-box">
@@ -17,6 +18,17 @@
     <div class="timer">
         <label id="minutes">00</label>:<label id="seconds">00</label>
     </div>
+
+    <ul>
+        <li>
+            <div class="lives">
+                <img src="img/heart.png" style="width: 25px; height: 25px;">
+                <img src="img/heart.png" style="width: 25px; height: 25px;">
+                <img src="img/heart.png" style="width: 25px; height: 25px;">
+            </div>
+        </li>
+    </ul>
+
     <div class="game-box">
         <table class="table" oncontextmenu="return false;" style="margin: auto">
             <tbody>
@@ -25,11 +37,12 @@
     </div>
 
     <div class="buttons-container">
-        <button autofocus onclick="changeLevel(this,4,2)">Easy</button>
-        <button onclick="changeLevel(this,8,4)">Medium</button>
-        <button onclick="changeLevel(this,12,30)">Hard</button>
+        <button autofocus onclick="changeLevel(this,4,2)" style="color: white; background-color: black;"
+            class="w3-btn w3-black">Easy</button>
+        <button onclick="changeLevel(this,8,4)" style="color: white; background-color: black;">Medium</button>
+        <button onclick="changeLevel(this,12,30)" style="color: white; background-color: black;">Hard</button>
     </div>
-    <div id="footer"> <span style=" font-size: 10px">
+    <div id="footer"> <span>
             Ohad Horenstein @2020 | SPRINT #1 | Mine Sweeper</span></div>
 
     <script src="js/util.js"></script>

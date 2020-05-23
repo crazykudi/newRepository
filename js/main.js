@@ -1,20 +1,20 @@
 'use strict'
 
-const MARKED_MINE_IMAGE = `<img src="img/flagged.png" style="width: 15px; height: 15px">`;
-const BOMB_IMG = `<img src="img/bomb.png" style="width: 15px; height: 15px">`;
-const EMPTY_IMG = `<img src="img/empty.png" style="width: 15px; height: 15px">`;
-const NEG_0_IMG = `<img src="img/0.png" style="width: 15px; height: 15px">`;
-const NEG_1_IMG = `<img src="img/1.png" style="width: 15px; height: 15px">`;
-const NEG_2_IMG = `<img src="img/2.png" style="width: 15px; height: 15px">`;
-const NEG_3_IMG = `<img src="img/3.png" style="width: 15px; height: 15px">`;
-const NEG_4_IMG = `<img src="img/4.png" style="width: 15px; height: 15px">`;
-const NEG_5_IMG = `<img src="img/5.png" style="width: 15px; height: 15px">`;
-const NEG_6_IMG = `<img src="img/6.png" style="width: 15px; height: 15px">`;
-const NEG_7_IMG = `<img src="img/7.png" style="width: 15px; height: 15px">`;
-const NEG_8_IMG = `<img src="img/8.png" style="width: 15px; height: 15px">`;
-const EXPLODED_IMG = `<img src="img/exploded.png" style="width: 15px; height: 15px">`;
-const FALSE_FLAGED_IMG = `<img src="img/false_flaged.png" style="width: 15px; height: 15px">`;
-const SMILE_WON_IMG = `<img src="img/smile_won.png" style="width: 15px; height: 15px">`;
+const MARKED_MINE_IMAGE = `<img src="img/flagged.png" style="width: 30px; height: 30px">`;
+const BOMB_IMG = `<img src="img/bomb.png" style="width: 30px; height: 30px">`;
+const EMPTY_IMG = `<img src="img/empty.png" style="width: 30px; height: 30px">`;
+const NEG_0_IMG = `<img src="img/0.png" style="width: 30px; height: 30px">`;
+const NEG_1_IMG = `<img src="img/1.png" style="width: 30px; height: 30px">`;
+const NEG_2_IMG = `<img src="img/2.png" style="width: 30px; height: 30px">`;
+const NEG_3_IMG = `<img src="img/3.png" style="width: 30px; height: 30px">`;
+const NEG_4_IMG = `<img src="img/4.png" style="width: 30px; height: 30px">`;
+const NEG_5_IMG = `<img src="img/5.png" style="width: 30px; height: 30px">`;
+const NEG_6_IMG = `<img src="img/6.png" style="width: 30px; height: 30px">`;
+const NEG_7_IMG = `<img src="img/7.png" sstyle="width: 30px; height: 30px">`;
+const NEG_8_IMG = `<img src="img/8.png" style="width: 30px; height: 30px">`;
+const EXPLODED_IMG = `<img src="img/exploded.png" style="width: 30px; height: 30px">`;
+const FALSE_FLAGED_IMG = `<img src="img/false_flaged.png" style="width: 30px; height: 30px">`;
+const SMILE_WON_IMG = `<img src="img/smile_won.png" style="width: 30px; height: 30px">`;
 
 var gMinutesLabel = document.getElementById("minutes");
 var gSecondsLabel = document.getElementById("seconds");
@@ -41,6 +41,7 @@ function init() {
         gMinutesLabel.innerHTML = "00";
     }
     document.getElementById("img").src = "img/smile.png";
+    restartLives();
 }
 
 function stopTimer(isWon) {
@@ -57,7 +58,8 @@ function gameInit() {
         isOn: false,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0
+        secsPassed: 0,
+        numOfLives: 3
     }
 
     return gGame;
@@ -170,6 +172,16 @@ function cellClicked(i, j) {
     gGame.shownCount++;
 
     if (currCell.isMine) {
+        var elLives = document.querySelectorAll('.lives img');
+        if (gGame.numOfLives > 1) {
+            gGame.numOfLives--;
+            elLives[gGame.numOfLives].style.visibility = 'hidden';
+            currCell.isShown = false;
+            gGame.shownCount--;
+
+            return;
+        }
+
         //end of the game ; you lost!
         reveralMines();
         renderBoard();
@@ -181,8 +193,10 @@ function cellClicked(i, j) {
         return;
 
         // check if need to reveal negs around cell
-    } else if (currCell.minesAroundCount === 0) expandShown(i, j, gBoard);
-
+    } else if (currCell.minesAroundCount === 0) {
+        expandShown(i, j, gBoard);
+        console.log('shown count: ', gGame.shownCount)
+    }
     //check if game won
     if (checkGameOver()) {
         gGame.isOn = false;
@@ -200,6 +214,7 @@ function cellMarkedClicked(i, j) {
         startTimer();
         gGame.secsPassed++;
         placeMines(gLevel.MINES, i, j);
+        setMinesNegsCount(gBoard);
     }
 
     var currCell = gBoard[i][j];
@@ -212,7 +227,8 @@ function cellMarkedClicked(i, j) {
     //check if game won
     if (checkGameOver()) {
         gGame.isOn = false;
-        stopTimer();
+        var isWon = true;
+        stopTimer(isWon);
         renderBoard();
         return;
     }
@@ -257,7 +273,7 @@ function expandShown(cellI, cellJ, board) {
             if (currCell.isMine === false && currCell.isShown === false) {
                 currCell.isShown = true;
                 gGame.shownCount++;
-            if (currCell.minesAroundCount === 0) expandShown(i,j,gBoard);
+                if (currCell.minesAroundCount === 0) expandShown(i, j, gBoard);
             }
         }
     }
@@ -319,3 +335,9 @@ function renderCellImg(cellI, cellJ, img) {
     elCell.innerHTML = img;
 }
 
+function restartLives() {
+    var elLives = document.querySelectorAll('.lives img');
+    for (var i = 0; i < elLives.length; i++) {
+        elLives[i].style.visibility = '';
+    }
+}
